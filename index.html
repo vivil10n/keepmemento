@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Memento · Keep the night</title>
+<meta name="description" content="One shared album for every party, trip and gig. Everyone adds their photos, reacts with their face, and wakes up to the recap. Coming soon to iPhone.">
+<meta name="theme-color" content="#0d0d0c">
+<link rel="icon" type="image/png" href="a/favicon.png">
+<link rel="apple-touch-icon" href="a/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://keepmemento.xyz/">
+<meta property="og:title" content="Memento · Keep the night">
+<meta property="og:description" content="One shared album for every party, trip and gig. Coming soon to iPhone.">
+<meta property="og:image" content="https://keepmemento.xyz/a/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&display=swap">
+<style>
+/* Layout: a centred waitlist hero with the night's photos floating round it, the app on three phones, three features, one last call. One typeface, Inter, as the brand says. */
+:root {
+  --night: #0d0d0c;      /* warm film-negative black, so photos glow */
+  --surface: #181816;
+  --fill: #2a2a27;
+  --paper: #f4f2ec;      /* text and buttons */
+  --flash: #d4f609;      /* lime: the logo, Wrapped and this page's big moments */
+  --ink: #0d0d0c;        /* text on lime */
+  --muted: rgba(244, 242, 236, 0.64);
+  --faint: rgba(244, 242, 236, 0.42);
+  --line: rgba(244, 242, 236, 0.12);
+  --ink-muted: rgba(13, 13, 12, 0.68);
+  --error: #ff8a6b;
+
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+  --gutter: clamp(16px, 4vw, 40px);
+  --max: 1160px;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--paper);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  padding-inline: var(--gutter);
+  overflow-x: hidden;
+}
+img, video { max-width: 100%; display: block; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--flash); outline-offset: 3px; border-radius: 8px; }
+.wrap { max-width: var(--max); margin-inline: auto; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- nav ---------- */
+.nav {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 16px;
+  background: linear-gradient(var(--night) 70%, transparent);
+}
+.nav img { width: 124px; height: auto; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--flash);
+  color: var(--ink);
+  font: 650 14px var(--font);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: scale(0.97); }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  padding-block: clamp(48px, 9vw, 112px) clamp(56px, 8vw, 96px);
+  text-align: center;
+}
+.hero > * { position: relative; z-index: 2; }
+.icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px -12px rgba(212, 246, 9, 0.35);
+  animation: rise 0.7s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 26px;
+  padding: 6px 12px 6px 10px;
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 550;
+  color: var(--muted);
+}
+.badge i {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--flash);
+  box-shadow: 0 0 0 0 rgba(212, 246, 9, 0.6);
+  animation: ping 2s ease-out infinite;
+}
+@keyframes ping { 70%, 100% { box-shadow: 0 0 0 7px rgba(212, 246, 9, 0); } }
+h1 {
+  margin: 18px 0 16px;
+  font-size: clamp(3.2rem, 8.6vw, 7rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+h1 em { font-style: normal; color: var(--flash); }
+.lede {
+  max-width: 36ch;
+  margin: 0 0 30px;
+  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  line-height: 1.45;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+@keyframes rise { from { opacity: 0; translate: 0 14px; } }
+
+/* ---------- waitlist form (used twice) ---------- */
+.join { width: min(100%, 460px); }
+.field {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 999px;
+  background: var(--surface);
+  transition: box-shadow 0.2s ease;
+}
+.field:focus-within { box-shadow: 0 0 0 2px rgba(212, 246, 9, 0.55); }
+.field input {
+  flex: 1;
+  min-width: 0;
+  padding: 0 16px;
+  border: 0;
+  background: transparent;
+  color: var(--paper);
+  font: 450 16px var(--font);
+}
+.field input::placeholder { color: var(--faint); }
+.field input:focus { outline: none; }
+.field .btn { padding: 13px 20px; font-size: 15px; }
+.note { min-height: 1.5em; margin: 12px 0 0; font-size: 13px; color: var(--faint); }
+.note[data-error] { color: var(--error); font-weight: 550; }
+
+/* social proof, written the way the app writes who's going */
+.proof {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.proof b { color: var(--paper); font-weight: 600; }
+.stack { display: flex; }
+.stack img {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--night);
+  margin-left: -8px;
+}
+.stack img:first-child { margin-left: 0; }
+
+/* what you get once you're in */
+.done {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  width: min(100%, 460px);
+  padding: 22px 22px 20px;
+  border-radius: 24px;
+  background: var(--surface);
+  animation: pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+.done b { font-size: 22px; letter-spacing: -0.02em; }
+.done p { margin: 0; color: var(--muted); font-size: 15px; }
+.done .num { color: var(--flash); font-weight: 700; font-variant-numeric: tabular-nums; }
+.share { display: flex; gap: 6px; width: 100%; margin-top: 12px; padding: 5px; border-radius: 999px; background: var(--fill); }
+.share input { flex: 1; min-width: 0; padding: 0 12px; border: 0; background: transparent; color: var(--muted); font: 450 13px var(--font); }
+.share .btn { padding: 9px 14px; font-size: 13px; background: var(--paper); }
+.done small { margin-top: 8px; font-size: 12px; color: var(--faint); }
+@keyframes pop { from { opacity: 0; scale: 0.9; } }
+
+/* the night's photos, floating round the headline */
+.float {
+  position: absolute;
+  z-index: 1;
+  width: clamp(92px, 11vw, 150px);
+  margin: 0;
+  padding: 6px 6px 22px;
+  border-radius: 4px;
+  background: var(--paper);
+  box-shadow: 0 24px 40px -16px rgba(0, 0, 0, 0.7);
+  animation: drift 8s ease-in-out infinite, develop 1.6s ease-out both;
+  animation-delay: var(--d), var(--dv);
+}
+.float img { width: 100%; aspect-ratio: 48 / 58; object-fit: cover; border-radius: 1px; }
+.f1 { left: 0; top: 10%; rotate: -9deg; --d: -1s; --dv: 0.2s; }
+.f2 { left: 9%; top: 56%; rotate: 6deg; --d: -4s; --dv: 0.5s; width: clamp(80px, 9vw, 120px); }
+.f3 { right: 1%; top: 6%; rotate: 8deg; --d: -2.5s; --dv: 0.35s; }
+.f4 { right: 8%; top: 54%; rotate: -7deg; --d: -6s; --dv: 0.65s; width: clamp(80px, 9vw, 124px); }
+.f5 { left: 18%; top: -2%; rotate: 4deg; --d: -3s; --dv: 0.8s; width: clamp(64px, 7vw, 96px); }
+.f6 { right: 19%; top: 82%; rotate: 5deg; --d: -5s; --dv: 0.9s; width: clamp(64px, 7vw, 96px); }
+@keyframes drift { 50% { translate: 0 -12px; } }
+@keyframes develop { from { filter: brightness(1.9) saturate(0) contrast(0.6) blur(2px); opacity: 0; } 20% { opacity: 1; } }
+.hero[data-again] .float { animation: drift 8s ease-in-out infinite, develop 1.8s ease-out both; animation-delay: var(--d), calc(var(--dv) * 0.5); }
+
+.flash {
+  position: fixed; inset: 0; z-index: 50;
+  background: radial-gradient(70% 70% at 50% 40%, #fff, rgba(255, 255, 255, 0.55));
+  opacity: 0; pointer-events: none;
+}
+.flash[data-go] { animation: flash 0.8s ease-out; }
+@keyframes flash { 8% { opacity: 0.95; } }
+
+/* ---------- the app on three phones ---------- */
+.showcase {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(12px, 3vw, 40px);
+  padding: clamp(40px, 6vw, 72px) clamp(16px, 4vw, 48px) 0;
+  border-radius: 32px;
+  background: var(--flash);
+  overflow: hidden;
+}
+.showcase video {
+  width: clamp(110px, 22vw, 250px);
+  height: auto;
+  border-radius: 15% / 7.1%;
+  margin-bottom: -18%;
+  filter: drop-shadow(0 30px 40px rgba(13, 13, 12, 0.45));
+}
+.showcase .mid { width: clamp(140px, 27vw, 300px); margin-bottom: -10%; }
+.showcase .side-l { rotate: -6deg; }
+.showcase .side-r { rotate: 6deg; }
+
+/* ---------- features: big type beside a phone that fades into the night ---------- */
+.features { padding-block: clamp(88px, 12vw, 160px) 0; }
+.features > h2 {
+  max-width: 12ch;
+  margin: 0 0 clamp(36px, 5vw, 64px);
+}
+h2 {
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  font-weight: 800;
+  line-height: 0.94;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+.rows {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 48px);
+  margin: 0; padding: 0; list-style: none;
+}
+.row { display: flex; flex-direction: column; gap: 22px; }
+.row-text { display: grid; gap: 10px; }
+.row h3 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 750;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+.row h3 em { font-style: normal; color: var(--flash); }
+.row p { margin: 0; max-width: 34ch; color: var(--muted); font-size: 15px; }
+/* the top of the phone, fading into the page; room above it so the hover lift never clips */
+.peek {
+  order: -1;
+  height: clamp(280px, 28vw, 360px);
+  padding-top: 28px;
+  overflow: hidden;
+  mask-image: linear-gradient(#000 58%, transparent);
+  -webkit-mask-image: linear-gradient(#000 58%, transparent);
+}
+.peek img {
+  width: min(74%, 250px);
+  margin-inline: auto;
+  border-radius: 15% / 7.1%;
+  rotate: var(--tilt, -2.5deg);
+  transition: translate 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), rotate 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.row:nth-child(2) .peek img { --tilt: 2.5deg; }
+.row:hover .peek img { translate: 0 -12px; rotate: 0deg; }
+
+/* ---------- last call ---------- */
+.last {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  margin-top: clamp(104px, 14vw, 180px);
+  text-align: center;
+}
+.last h2 { margin: 0; font-size: clamp(2.6rem, 7vw, 5.4rem); }
+.last h2 em { font-style: normal; color: var(--flash); }
+.last > p { margin: 0 0 8px; max-width: 38ch; color: var(--muted); }
+/* ---------- footer: a small line, then the logo, dithered and sinking off the bottom of the page ---------- */
+footer {
+  margin-top: clamp(104px, 14vw, 180px);
+  overflow: hidden;
+  font-size: 13px;
+  color: var(--faint);
+}
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 32px;
+  padding-bottom: clamp(20px, 3vw, 32px);
+}
+.foot p { margin: 0; max-width: 60ch; }
+/* 1-bit ordered dither, lit by a flash that follows the cursor */
+.big {
+  position: relative;
+  aspect-ratio: 2237 / 588;
+  margin-bottom: -5%;
+}
+.big canvas, .big img { position: absolute; inset: 0; width: 100%; height: 100%; }
+.big canvas { image-rendering: pixelated; }
+.big[data-live] img { visibility: hidden; }
+
+/* ---------- smaller screens ---------- */
+@media (max-width: 860px) {
+  .rows { grid-template-columns: minmax(0, 1fr); max-width: 420px; margin-inline: auto; gap: 56px; }
+  .peek { height: 320px; }
+}
+@media (max-width: 700px) {
+  .f2, .f4, .f5, .f6 { display: none; }
+  .f1 { left: -6%; top: 2%; }
+  .f3 { right: -6%; top: 0; }
+  .hero { padding-top: 132px; }
+}
+@media (max-width: 480px) {
+  .field { flex-direction: column; border-radius: 22px; }
+  .field input { padding: 14px 12px 10px; }
+  .proof { flex-direction: column; gap: 8px; }
+  .showcase .side-l, .showcase .side-r { display: none; }
+  .showcase .mid { width: 62%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .icon, .badge i, .float, .done { animation: none !important; }
+  .flash[data-go] { animation: none; }
+}
+</style>
+</head>
+<body>
+<nav class="nav wrap" aria-label="Memento">
+  <img src="a/logo-white.png" alt="Memento">
+  <a class="btn" href="#join">Join the waitlist</a>
+</nav>
+
+<main class="wrap">
+  <section class="hero" id="hero" aria-labelledby="hero-h">
+    <figure class="float f1" aria-hidden="true"><img src="a/pol-hats.jpg" alt=""></figure>
+    <figure class="float f2" aria-hidden="true"><img src="a/pol-candles.jpg" alt=""></figure>
+    <figure class="float f3" aria-hidden="true"><img src="a/pol-mic1.jpg" alt=""></figure>
+    <figure class="float f4" aria-hidden="true"><img src="a/pol-santa.jpg" alt=""></figure>
+    <figure class="float f5" aria-hidden="true"><img src="a/pol-cake.jpg" alt=""></figure>
+    <figure class="float f6" aria-hidden="true"><img src="a/pol-food.jpg" alt=""></figure>
+
+    <img class="icon" src="a/app-icon.png" alt="">
+    <span class="badge"><i></i>Coming soon to iPhone</span>
+    <h1 id="hero-h">Keep the <em>night.</em></h1>
+    <p class="lede">One shared album for every party, trip and gig. Everyone adds their photos, reacts with their face, and wakes up to the recap.</p>
+
+    <div class="slot" id="join">
+      <form class="join" novalidate>
+        <label class="sr" for="email-hero">Email address</label>
+        <div class="field">
+          <input id="email-hero" name="email" type="email" inputmode="email" autocomplete="email" placeholder="Your email" required>
+          <button class="btn" type="submit">Join the waitlist</button>
+        </div>
+        <p class="note" aria-live="polite">No spam. One email when Memento launches.</p>
+      </form>
+    </div>
+    <p class="proof">
+      <span class="stack" aria-hidden="true"><img src="a/av-jess.jpg" alt=""><img src="a/av-gavin.jpg" alt=""><img src="a/av-renee.jpg" alt=""><img src="a/av-chris.jpg" alt=""></span>
+      <span><b>Jess, Gavin</b> and 2,416 others are on the list</span>
+    </p>
+  </section>
+
+  <section class="showcase" aria-label="Memento on iPhone">
+    <video class="side-l" src="a/clip-invite.mp4" poster="a/clip-invite.jpg" muted loop playsinline preload="metadata" aria-label="Opening a Memento invite from Messages and joining Karaoke Night"></video>
+    <video class="mid" src="a/clip-post.mp4" poster="a/clip-post.jpg" muted loop playsinline preload="auto" aria-label="The Karaoke Night album: picking photos from tonight and posting them"></video>
+    <video class="side-r" src="a/clip-wrapped.mp4" poster="a/poster-wrapped.jpg" muted loop playsinline preload="metadata" aria-label="Memento Wrapped: the night in numbers, the top song and the awards"></video>
+  </section>
+
+  <section class="features" aria-labelledby="features-h">
+    <h2 id="features-h">The whole night, in one place.</h2>
+    <ol class="rows">
+      <li class="row">
+        <div class="row-text">
+          <h3>Everyone's photos, <em>one album.</em></h3>
+          <p>Send one link to the group chat. Photos, notes and polls land together, sorted by the time of night.</p>
+        </div>
+        <div class="peek"><img src="a/poster-post.jpg" alt="Picking three photos from tonight to add to the album"></div>
+      </li>
+      <li class="row">
+        <div class="row-text">
+          <h3>React with <em>your face.</em></h3>
+          <p>Skip the emoji. Snap a selfie reaction so your friends see exactly how you feel.</p>
+        </div>
+        <div class="peek"><img src="a/poster-react.jpg" alt="The front camera open to react to Renee's photo with your face"></div>
+      </li>
+      <li class="row">
+        <div class="row-text">
+          <h3>Wake up to <em>Wrapped.</em></h3>
+          <p>The morning after, get the night in numbers, the song that ruled it and an award for everyone.</p>
+        </div>
+        <div class="peek"><img src="a/poster-wrapped.jpg" alt="Wrapped card: 248 photos and videos from 14 phones"></div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="last" aria-labelledby="last-h">
+    <h2 id="last-h">Same time <em>next year?</em></h2>
+    <p>Join the waitlist and be first in when Memento launches on iPhone.</p>
+    <div class="slot">
+      <form class="join" novalidate>
+        <label class="sr" for="email-last">Email address</label>
+        <div class="field">
+          <input id="email-last" name="email" type="email" inputmode="email" autocomplete="email" placeholder="Your email" required>
+          <button class="btn" type="submit">Join the waitlist</button>
+        </div>
+        <p class="note" aria-live="polite">No spam. One email when Memento launches.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="foot">
+    <p>© 2026 Memento. Made for the morning after.</p>
+    <p>A concept by Vivian Truong · <a href="https://www.vivitruon.com/projects/memento">See the case study</a></p>
+  </div>
+  <div class="big" id="big">
+    <img src="a/big-logo.png" alt="Memento">
+    <canvas aria-hidden="true"></canvas>
+  </div>
+</footer>
+
+<div class="flash" aria-hidden="true"></div>
+
+<script>
+(() => {
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Recordings play only while on screen
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause();
+  }, { threshold: 0.25 });
+  if (!reduced) document.querySelectorAll("video").forEach((v) => io.observe(v));
+
+  // Demo waitlist: a valid email gets the flash and a spot, and nothing leaves the page
+  const flash = document.querySelector(".flash");
+  const hero = document.getElementById("hero");
+  const spot = (2418 + 1).toLocaleString("en");
+  const NOTE = "No spam. One email when Memento launches.";
+
+  const done = () => `
+    <div class="done" role="status">
+      <b>You're on the list 📸</b>
+      <p>You're <span class="num">#${spot}</span>. We'll email you when Memento launches.</p>
+      <div class="share">
+        <input readonly aria-label="Your invite link" value="${location.href.split("#")[0]}">
+        <button class="btn" type="button" data-copy>Copy link</button>
+      </div>
+      <small>Invite friends to move up the list.</small>
+    </div>`;
+
+  // The big logo: 1-bit ordered dither, the strip and letters in off-white, the photos in its frames in lime.
+  // A flash follows the cursor; with no cursor, it drifts on its own.
+  (() => {
+    const box = document.getElementById("big");
+    const cv = box.querySelector("canvas");
+    const BAYER = [0,32,8,40,2,34,10,42,48,16,56,24,50,18,58,26,12,44,4,36,14,46,6,38,60,28,52,20,62,30,54,22,
+      3,35,11,43,1,33,9,41,51,19,59,27,49,17,57,25,15,47,7,39,13,45,5,37,63,31,55,23,61,29,53,21].map((v) => (v + 0.5) / 64);
+    const DOT = 4;
+    const FRAMES = [[10.55, 10.37, 7.55, 23.8], [6.21, 34.69, 8.9, 23], [3.17, 58.5, 8.23, 28.4]];
+    const load = (src) => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
+    let ink, photo, w, h, out, ctx, pointer = null, on = false, raf = 0, t0 = performance.now();
+
+    const build = (mark, holes, shots) => {
+      const r = box.getBoundingClientRect();
+      w = Math.max(1, Math.round(r.width / DOT));
+      h = Math.max(1, Math.round(r.height / DOT));
+      cv.width = w; cv.height = h;
+      const layer = () => { const c = document.createElement("canvas"); c.width = w; c.height = h; return c.getContext("2d", { willReadFrequently: true }); };
+      const pc = layer();
+      FRAMES.forEach(([l, t, fw, fh], i) => {
+        const img = shots[i];
+        const bw = (fw / 100) * w * 1.12, bh = (fh / 100) * h * 1.12;
+        const cx = ((l + fw / 2) / 100) * w, cy = ((t + fh / 2) / 100) * h;
+        const k = Math.max(bw / img.width, bh / img.height);
+        pc.drawImage(img, cx - (img.width * k) / 2, cy - (img.height * k) / 2, img.width * k, img.height * k);
+      });
+      pc.globalCompositeOperation = "destination-in";
+      pc.drawImage(holes, 0, 0, w, h);
+      const lc = layer();
+      lc.drawImage(mark, 0, 0, w, h);
+      photo = pc.getImageData(0, 0, w, h).data;
+      ink = lc.getImageData(0, 0, w, h).data;
+      ctx = cv.getContext("2d");
+      out = ctx.createImageData(w, h);
+    };
+
+    const draw = (now) => {
+      const px = out.data;
+      const reach = w * 0.3;
+      let fx, fy;
+      if (pointer) { fx = pointer.x / DOT; fy = pointer.y / DOT; }
+      else { const s = (now - t0) / 1000; fx = w * (0.5 + 0.38 * Math.sin(s * 0.45)); fy = h * (0.5 + 0.3 * Math.sin(s * 0.8)); }
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const i = (y * w + x) * 4;
+          const spot = Math.max(0, 1 - Math.hypot(x - fx, (y - fy) * 1.3) / reach);
+          const light = 0.32 + 0.68 * spot;
+          let v = 0, r = 244, g = 242, b = 236;
+          if (ink[i + 3] > 128) v = light;
+          else if (photo[i + 3] > 128) {
+            v = ((photo[i] * 0.3 + photo[i + 1] * 0.59 + photo[i + 2] * 0.11) / 255) * (0.7 + light);
+            r = 212; g = 246; b = 9;
+          }
+          px[i] = r; px[i + 1] = g; px[i + 2] = b;
+          px[i + 3] = v > BAYER[((y & 7) << 3) | (x & 7)] ? 255 : 0;
+        }
+      }
+      ctx.putImageData(out, 0, 0);
+      if (on && !reduced) raf = requestAnimationFrame(draw);
+    };
+
+    Promise.all([load("a/big-logo.png"), load("a/big-holes.png"), load("a/pol-hats.jpg"), load("a/pol-mic1.jpg"), load("a/pol-candles.jpg")])
+      .then(([mark, holes, ...shots]) => {
+        const start = () => { build(mark, holes, shots); box.dataset.live = ""; draw(performance.now()); };
+        start();
+        new IntersectionObserver(([e]) => {
+          on = e.isIntersecting;
+          cancelAnimationFrame(raf);
+          if (on && !reduced) raf = requestAnimationFrame(draw);
+        }).observe(box);
+        let rt = 0;
+        addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(start, 150); });
+        box.addEventListener("pointermove", (e) => {
+          const r = box.getBoundingClientRect();
+          pointer = { x: e.clientX - r.left, y: e.clientY - r.top };
+          if (reduced) draw(performance.now());
+        });
+        box.addEventListener("pointerleave", () => { pointer = null; t0 = performance.now(); });
+      })
+      .catch(() => {});
+  })();
+
+  document.addEventListener("click", async (e) => {
+    const b = e.target.closest("[data-copy]");
+    if (!b) return;
+    const input = b.parentElement.querySelector("input");
+    try {
+      await navigator.clipboard.writeText(input.value);
+      b.textContent = "Copied";
+    } catch {
+      input.select();
+      b.textContent = "Press ⌘C";
+    }
+    setTimeout(() => { b.textContent = "Copy link"; }, 1800);
+  });
+
+  document.querySelectorAll("form.join").forEach((form) => {
+    const input = form.querySelector("input");
+    const note = form.querySelector(".note");
+    input.addEventListener("input", () => {
+      if (note.dataset.error === undefined) return;
+      delete note.dataset.error;
+      note.textContent = NOTE;
+    });
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const value = input.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
+        note.dataset.error = "";
+        note.textContent = value ? "That email looks off. Check for a typo and try again." : "Add your email to join the waitlist.";
+        input.focus();
+        return;
+      }
+      if (!reduced) {
+        delete flash.dataset.go; void flash.offsetWidth; flash.dataset.go = "";
+        delete hero.dataset.again; void hero.offsetWidth; hero.dataset.again = "";
+      }
+      // one sign-up counts for the whole page
+      document.querySelectorAll(".slot").forEach((slot) => { slot.innerHTML = done(); });
+      document.querySelector(".proof").hidden = true;
+      const nav = document.querySelector(".nav .btn");
+      nav.textContent = "You're on the list";
+      nav.removeAttribute("href");
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
